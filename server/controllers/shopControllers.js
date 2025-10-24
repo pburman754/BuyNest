@@ -8,7 +8,7 @@ const createShop = async (req, res) => {
     if (shopExists) {
       return res.status(400).json({ message: "You already own a shop" });
     }
-
+ 
     const shop = new Shop({
       name,
       description,

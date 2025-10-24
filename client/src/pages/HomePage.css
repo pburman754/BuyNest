@@ -1,0 +1,22 @@
+/* src/pages/HomePage.css */
+
+.product-grid {
+  display: grid;
+  /* This creates a responsive grid: */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Basic loading/error message styling */
+.loading-spinner, .error-message {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-top: 5rem;
+}
+
+.error-message {
+  color: #721c24;
+  background-color: #f8d7da;
+  padding: 1rem;
+  border-radius: 8px;
+}

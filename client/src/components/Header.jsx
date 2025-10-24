@@ -1,24 +1,27 @@
-import { Link } from "react-router-dom";
-import "./Header.css";
-import { useAuth } from "../context/AuthContext";
+// src/components/Header.jsx
+
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import './Header.css';
 
 const Header = () => {
   const { user, logout } = useAuth();
 
   return (
     <header className="header-container">
-      <div className="header-logo">
-        <Link to="/">BuyNext</Link>
-      </div>
+      {/* ... (logo) ... */}
       <nav className="header-nav">
         {user ? (
+          // --- Logged-in ---
           <>
+            <Link to="/dashboard">My Dashboard</Link> {/* <-- ADD THIS LINK */}
             <span>Welcome, {user.name}!</span>
             <button onClick={logout} className="btn-logout">
-              logout
+              Logout
             </button>
           </>
         ) : (
+          // --- Logged-out ---
           <>
             <Link to="/login">Login</Link>
             <Link to="/register">Register</Link>
@@ -28,4 +31,5 @@ const Header = () => {
     </header>
   );
 };
+
 export default Header;

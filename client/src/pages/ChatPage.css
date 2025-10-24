@@ -1,0 +1,110 @@
+/* src/pages/ChatPage.css */
+
+.chat-container {
+  display: flex;
+  height: 80vh; /* Make it take up most of the screen height */
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden; /* Important for rounded corners */
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Column 1: Inbox/Conversations List --- */
+.chat-sidebar {
+  flex-basis: 30%;
+  border-right: 1px solid #e0e0e0;
+  overflow-y: auto; /* Make it scrollable if many chats */
+}
+
+.chat-sidebar-header {
+  padding: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f8f8f8;
+}
+
+.conversation {
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  cursor: pointer;
+}
+
+.conversation:hover {
+  background-color: #f5f5f5;
+}
+
+.conversation.active {
+  background-color: #e0f0ff; /* Light blue for active chat */
+}
+
+.conversation p {
+  margin: 0;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+/* --- Column 2: Chat Window --- */
+.chat-window {
+  flex-basis: 70%;
+  display: flex;
+  flex-direction: column; /* Stack messages on top of input */
+}
+
+.chat-window-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 1.2rem;
+  color: #777;
+}
+
+/* --- Message Area --- */
+.message-list {
+  flex-grow: 1; /* This makes the message list fill the space */
+  overflow-y: auto; /* Make messages scrollable */
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  padding: 0.75rem 1rem;
+  border-radius: 18px;
+  margin-bottom: 0.75rem;
+  max-width: 60%;
+  line-height: 1.4;
+}
+
+.message.sent {
+  background-color: #007bff; /* Blue for our messages */
+  color: white;
+  align-self: flex-end; /* Align to the right */
+  border-bottom-right-radius: 4px;
+}
+
+.message.received {
+  background-color: #f1f1f1; /* Grey for their messages */
+  color: #333;
+  align-self: flex-start; /* Align to the left */
+  border-bottom-left-radius: 4px;
+}
+
+/* --- Message Input Form --- */
+.message-form {
+  display: flex;
+  padding: 1rem;
+  border-top: 1px solid #e0e0e0;
+  background: #f8f8f8;
+}
+
+.message-input {
+  flex-grow: 1;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}

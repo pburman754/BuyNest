@@ -49,7 +49,7 @@ const getAllProducts=async(req,res)=>{
 
 const getProductById=async(req,res)=>{
   try{
-    const product=await Product.findById(req.params.id).populate("shop","name logo description");
+    const product = await Product.findById(req.params.id).populate('shop', 'name logo description owner');
     if(product){
       res.json(product);
     }else{

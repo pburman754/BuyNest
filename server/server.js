@@ -13,6 +13,12 @@ const { Server } = require("socket.io");
 
 dotenv.config();
 
+// Debug environment variables
+console.log('Environment variables loaded:');
+console.log('MONGO_URI:', process.env.MONGO_URI ? 'Set' : 'Not set');
+console.log('JWT_SECRET:', process.env.JWT_SECRET ? 'Set' : 'Not set');
+console.log('PORT:', process.env.PORT || 5000);
+
 connectDB();
 
 const app = express();

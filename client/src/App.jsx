@@ -9,7 +9,7 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import DashboardPage from './pages/DashboardPage';     // 1. Import
 import ProtectedRoute from './components/ProtectedRoute'; // 2. Import
 import AddProductPage from './pages/AddProductPage'; // 1. Import
-
+import ChatPage from './pages/ChatPage';
 import './App.css';
 
 function App() {
@@ -39,6 +39,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <AddProductPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chat"
+            element={
+              <ProtectedRoute>
+                <ChatPage />
               </ProtectedRoute>
             }
           />

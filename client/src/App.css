@@ -68,3 +68,10 @@
   margin: 2rem auto; /* 2rem top/bottom, auto left/right */
   padding: 0 1rem; /* 1rem padding on the sides */
 }
+.btn-secondary {
+  background-color: #6c757d; /* A grey color */
+  margin-top: 0.5rem; /* Add some space */
+}
+.btn-secondary:hover {
+  background-color: #5a6268;
+}

@@ -15,6 +15,8 @@ const Header = () => {
           // --- Logged-in ---
           <>
             <Link to="/dashboard">My Dashboard</Link> {/* <-- ADD THIS LINK */}
+            <Link to="/chat">My Chats</Link>
+            
             <span>Welcome, {user.name}!</span>
             <button onClick={logout} className="btn-logout">
               Logout

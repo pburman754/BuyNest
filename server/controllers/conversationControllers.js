@@ -40,7 +40,7 @@ const getConversations = async (req, res) => {
       );
       return {
         _id: convo._id,
-        participants: otherParticipant,
+        participant: otherParticipant,
         createdAt: convo.createdAt,
         updatedAt: convo.updatedAt,
       };

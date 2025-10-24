@@ -25,7 +25,7 @@ const registerUser = async (req, res) => {
     });
 
     if (user) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'fallback_jwt_secret_key', {
         expiresIn: "30d",
       });
 
@@ -51,7 +51,7 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ email: { $regex: new RegExp(`^${email}$`, 'i') } });
 
     if (user && (await bcrypt.compare(password, user.password))) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || 'fallback_jwt_secret_key', {
         expiresIn: "30d",
       });
 

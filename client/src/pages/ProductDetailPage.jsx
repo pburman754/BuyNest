@@ -1,19 +1,50 @@
 // src/pages/ProductDetailPage.jsx
 
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; // 1. Import the hook
-import axios from 'axios';
-import './ProductDetailPage.css'; // We'll create this soon
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom"; // Import both hooks
+import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+import "./ProductDetailPage.css"; // We'll create this soon
 
 const ProductDetailPage = () => {
   // 2. Get the 'id' from the URL. It MUST match the name in App.jsx
   const { id } = useParams();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   // 3. We have the same states as the homepage
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const handleStartChat = async () => {
+    if (!user) {
+      // If not logged in, send to login page
+      navigate("/login");
+      return;
+    }
+
+    try {
+      // Set up auth headers
+      const config = {
+        headers: { Authorization: `Bearer ${user.token}` },
+      };
+
+      // Call the "find or create" conversation endpoint
+      // Our backend fix gives us 'product.shop.owner'
+      await axios.post(
+        "/api/conversations",
+        { receiverId: product.shop.owner },
+        config
+      );
+
+      // 6. Success! Send user to their inbox
+      navigate("/chat");
+    } catch (err) {
+      console.error("Error starting conversation", err);
+      alert("Error starting chat. Please try again.");
+    }
+  };
   // 4. This hook will run when the component loads
   useEffect(() => {
     const fetchProduct = async () => {
@@ -24,7 +55,7 @@ const ProductDetailPage = () => {
         setProduct(data);
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch product.');
+        setError("Failed to fetch product.");
         setLoading(false);
       }
     };
@@ -55,9 +86,18 @@ const ProductDetailPage = () => {
         <p className="product-detail-description">{product.description}</p>
         <button className="btn btn-block">Add to Cart</button>
 
+        <button
+          onClick={handleStartChat}
+          className="btn btn-block btn-secondary"
+        >
+          Chat with Seller
+        </button>
+
         {/* 9. Let's show the shop info! */}
         <div className="product-detail-shop">
-          <p>Sold by: <strong>{product.shop.name}</strong></p>
+          <p>
+            Sold by: <strong>{product.shop.name}</strong>
+          </p>
           {/* We'll make this a chat link later */}
         </div>
       </div>

@@ -8,15 +8,21 @@ const productRoutes = require("./routes/productRoutes");
 const conversationRoutes = require("./routes/conversationRoutes");
 const Message = require("./models/messageModel");
 const Conversation = require("./models/conversationModel");
-
 const http = require("http");
 const { Server } = require("socket.io");
 
 dotenv.config();
+
 connectDB();
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.get("/", (req, res) => res.send("MarketGram API is running..."));
@@ -29,7 +35,7 @@ app.use("/api/conversations", conversationRoutes);
 const httpServer = http.createServer(app);
 
 const io = new Server(httpServer, {
-  cors: { origin: "*", methods: ["GET", "POST"] },
+  cors: { origin: "http://localhost:5173", methods: ["GET", "POST"] },
 });
 
 let activeUsers = {};
@@ -50,7 +56,11 @@ io.on("connection", (socket) => {
 
   socket.on("sendMessage", async ({ conversationId, senderId, body }) => {
     try {
-      const newMessage = await Message.create({ conversationId, sender: senderId, body });
+      const newMessage = await Message.create({
+        conversationId,
+        sender: senderId,
+        body,
+      });
       const message = await newMessage.populate("sender", "name email");
       const conversation = await Conversation.findById(conversationId);
       const receiverId = conversation.participants.find(
@@ -80,4 +90,5 @@ io.on("connection", (socket) => {
 });
 
 const PORT = process.env.PORT || 5000;
+
 httpServer.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));

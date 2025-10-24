@@ -32,3 +32,28 @@
 .header-nav a:hover {
   color: #007bff;
 }
+
+/* src/components/Header.css */
+
+/* ... (all your other styles) ... */
+
+.btn-logout {
+  background: none;
+  border: none;
+  color: #dc3545; /* A red color */
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-left: 1.5rem;
+}
+
+.btn-logout:hover {
+  text-decoration: underline;
+}
+
+/* Let's also style our welcome message */
+.header-nav span {
+   margin-left: 1.5rem;
+   font-size: 1rem;
+   color: #333;
+}

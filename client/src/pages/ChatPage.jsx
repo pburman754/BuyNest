@@ -38,7 +38,7 @@ const ChatPage = () => {
       }
     };
     fetchConversations();
-  }, [user?.token]); // Run once when user is loaded
+  }, [user]); // Re-run when the user object itself changes
 
   // --- 3. Listen for REAL-TIME messages ---
   useEffect(() => {

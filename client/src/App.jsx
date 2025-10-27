@@ -10,6 +10,7 @@ import DashboardPage from './pages/DashboardPage';     // 1. Import
 import ProtectedRoute from './components/ProtectedRoute'; // 2. Import
 import AddProductPage from './pages/AddProductPage'; // 1. Import
 import ChatPage from './pages/ChatPage';
+import './index.css';
 import './App.css';
 
 function App() {

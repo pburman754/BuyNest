@@ -6,4 +6,4 @@ const { protect } = require('../middleware/authMiddleware');
 // Any request to this route must first pass through the 'protect' middleware
 router.post('/', protect, createShop);
 
-module.exports = router;
+module.exports = router; 

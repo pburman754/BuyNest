@@ -1,0 +1,48 @@
+/* src/pages/ProductDetailPage.css */
+
+.product-detail-container {
+  display: flex;
+  gap: 2rem; /* Space between the columns */
+}
+
+.product-detail-image {
+  flex-basis: 50%; /* Image column takes up 50% of the space */
+}
+
+.product-detail-image img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.product-detail-info {
+  flex-basis: 50%; /* Info column takes up the other 50% */
+  display: flex;
+  flex-direction: column;
+}
+
+.product-detail-name {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.product-detail-price {
+  font-size: 1.75rem;
+  color: #007bff;
+  margin-bottom: 1.5rem;
+}
+
+.product-detail-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.product-detail-shop {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+  font-size: 1rem;
+  color: #555;
+}

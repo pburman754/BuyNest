@@ -10,7 +10,7 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ message: "Please enter all fields" });
     }
 
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email: { $regex: new RegExp(`^${email}$`, 'i') } });
     if (userExists) {
       return res.status(400).json({ message: "User already Exists" });
     }

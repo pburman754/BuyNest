@@ -19,82 +19,88 @@ console.log('MONGO_URI:', process.env.MONGO_URI ? 'Set' : 'Not set');
 console.log('JWT_SECRET:', process.env.JWT_SECRET ? 'Set' : 'Not set');
 console.log('PORT:', process.env.PORT || 5000);
 
-connectDB();
+const startServer = async () => {
+  await connectDB();
 
-const app = express();
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
-app.use(express.json());
+  const app = express();
+  app.use(
+    cors({
+      origin: "http://localhost:5173",
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      credentials: true,
+    })
+  );
+  app.use(express.json());
 
-app.get("/", (req, res) => res.send("MarketGram API is running..."));
+  app.get("/", (req, res) => res.send("BuyNest API is running..."));
 
-app.use("/api/users", userRoutes);
-app.use("/api/shops", shopRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/conversations", conversationRoutes);
+  app.use("/api/users", userRoutes);
+  app.use("/api/shops", shopRoutes);
+  app.use("/api/products", productRoutes);
+  app.use("/api/conversations", conversationRoutes);
 
-const httpServer = http.createServer(app);
+  const httpServer = http.createServer(app);
 
-const io = new Server(httpServer, {
-  cors: { origin: "http://localhost:5173", methods: ["GET", "POST"] },
-});
-
-let activeUsers = {};
-
-io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.id}`);
-
-  socket.on("setup", (userId) => {
-    activeUsers[userId] = socket.id;
-    console.log("User setup:", userId, "is", socket.id);
-    io.emit("get-active-users", Object.keys(activeUsers));
+  const io = new Server(httpServer, {
+    cors: { origin: "http://localhost:5173", methods: ["GET", "POST"] },
   });
 
-  socket.on("joinConversation", (conversationId) => {
-    socket.join(conversationId);
-    console.log(`User ${socket.id} joined room: ${conversationId}`);
-  });
+  let activeUsers = {};
 
-  socket.on("sendMessage", async ({ conversationId, senderId, body }) => {
-    try {
-      const newMessage = await Message.create({
-        conversationId,
-        sender: senderId,
-        body,
-      });
-      const message = await newMessage.populate("sender", "name email");
-      const conversation = await Conversation.findById(conversationId);
-      const receiverId = conversation.participants.find(
-        (p) => p.toString() !== senderId
-      );
+  io.on("connection", (socket) => {
+    console.log(`User Connected: ${socket.id}`);
 
-      const receiverSocketId = activeUsers[receiverId];
-      if (receiverSocketId) {
-        io.to(receiverSocketId).emit("receiveMessage", message);
-        socket.emit("receiverMessage", message);
+    socket.on("setup", (userId) => {
+      activeUsers[userId] = socket.id;
+      console.log("User setup:", userId, "is", socket.id);
+      io.emit("get-active-users", Object.keys(activeUsers));
+    });
+
+    socket.on("joinConversation", (conversationId) => {
+      socket.join(conversationId);
+      console.log(`User ${socket.id} joined room: ${conversationId}`);
+    });
+
+    socket.on("sendMessage", async ({ conversationId, senderId, body }) => {
+      try {
+        const newMessage = await Message.create({
+          conversationId,
+          sender: senderId,
+          body,
+        });
+        const message = await newMessage.populate("sender", "name email");
+        const conversation = await Conversation.findById(conversationId);
+        const receiverId = conversation.participants.find(
+          (p) => p.toString() !== senderId
+        );
+
+        const receiverSocketId = activeUsers[receiverId];
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit("receiveMessage", message);
+          socket.emit("receiverMessage", message);
+        }
+      } catch (error) {
+        console.error("Error handling sendMessage:", error);
       }
-    } catch (error) {
-      console.error("Error handling sendMessage:", error);
-    }
-  });
+    });
 
-  socket.on("disconnect", () => {
-    console.log(`User Disconnected: ${socket.id}`);
-    for (const userId in activeUsers) {
-      if (activeUsers[userId] === socket.id) {
-        delete activeUsers[userId];
-        break;
+    socket.on("disconnect", () => {
+      console.log(`User Disconnected: ${socket.id}`);
+      for (const userId in activeUsers) {
+        if (activeUsers[userId] === socket.id) {
+          delete activeUsers[userId];
+          break;
+        }
       }
-    }
-    io.emit("get-active-users", Object.keys(activeUsers));
+      io.emit("get-active-users", Object.keys(activeUsers));
+    });
   });
-});
 
-const PORT = process.env.PORT || 5000;
+  const PORT = process.env.PORT || 5000;
 
-httpServer.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));
+  httpServer.listen(PORT, () =>
+    console.log(`Server is running on PORT ${PORT}`)
+  );
+};
+
+startServer();
